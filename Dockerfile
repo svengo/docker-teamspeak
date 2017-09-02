@@ -1,30 +1,27 @@
-FROM debian:jessie
-MAINTAINER Matt Bentley <mbentley@mbentley.net>
+FROM alpine:3.6
+MAINTAINER Sven Gottwald <svengo@gmx.net>
 
-ENV TS_DIRECTORY=/opt/teamspeak
+ENV USER teamspeak
+ENV GROUP teamspeak
+ENV TS_DIRECTORY=/teamspeak
 
-RUN apt-get update && apt-get install -y bzip2 w3m wget && rm -rf /var/lib/apt/lists/* &&\
-  TS_SERVER_VER="$(w3m -dump https://www.teamspeak.com/downloads | grep -m 1 'Server 64-bit ' | awk '{print $NF}')" &&\
-  wget http://dl.4players.de/ts/releases/${TS_SERVER_VER}/teamspeak3-server_linux_amd64-${TS_SERVER_VER}.tar.bz2 -O /tmp/teamspeak.tar.bz2 &&\
-  tar jxf /tmp/teamspeak.tar.bz2 -C /opt &&\
-  mv /opt/teamspeak3-server_* ${TS_DIRECTORY} &&\
-  rm /tmp/teamspeak.tar.bz2 &&\
-  apt-get purge -y bzip2 w3m wget &&\
-  apt-get autoremove -y &&\
-  rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache wget bzip2 w3m su-exec tini ca-certificates bash \
+  && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub\
+  && wget -q https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-2.25-r0.apk \
+  && apk add glibc-2.25-r0.apk \
+  && TS_SERVER_VER="$(w3m -dump https://www.teamspeak.com/downloads | grep -m 1 'Server 64-bit ' | awk '{print $NF}')" \
+  && wget --quiet http://dl.4players.de/ts/releases/${TS_SERVER_VER}/teamspeak3-server_linux_amd64-${TS_SERVER_VER}.tar.bz2 -O /tmp/teamspeak.tar.bz2 \
+  && tar jxf /tmp/teamspeak.tar.bz2 -C / \
+  && mv /teamspeak3-server_* ${TS_DIRECTORY} \
+  && rm /tmp/teamspeak.tar.bz2
 
-RUN groupadd -g 503 teamspeak &&\
-  useradd -u 503 -g 503 -d ${TS_DIRECTORY} teamspeak &&\
-  mkdir /data &&\
-  chown -R teamspeak:teamspeak ${TS_DIRECTORY} /data
+RUN addgroup -S ${GROUP} \
+  && adduser -h ${TS_DIRECTORY} -G ${GROUP} -S -D ${USER} \
+  && chown -R ${USER}:${GROUP} ${TS_DIRECTORY}
 
-# add tini (https://github.com/krallin/tini)
-ENV TINI_VERSION v0.13.1
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+VOLUME ["/data"]
 
 COPY entrypoint.sh /entrypoint.sh
 
-USER teamspeak
 EXPOSE 9987/udp 10011 30033
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["tini" , "/entrypoint.sh"]

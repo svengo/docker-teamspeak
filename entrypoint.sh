@@ -11,10 +11,14 @@ trap stop INT
 trap stop TERM
 
 # create directory for teamspeak files
-test -d /data/files || mkdir -p /data/files && chown teamspeak:teamspeak /data/files
+test -d /data/files || mkdir -p /data/files
 
 # create directory for teamspeak logs
-test -d /data/logs || mkdir -p /data/logs && chown teamspeak:teamspeak /data/logs
+test -d /data/logs || mkdir -p /data/logs
+
+# change user and goup of data directory
+chown -R teamspeak:teamspeak /data
+
 
 # create symlinks for all files and directories in the persistent data directory
 cd "${TS_DIRECTORY}"
@@ -41,4 +45,4 @@ do
 done
 
 export LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH"
-exec /tini -- ./ts3server "$@"
+exec su-exec teamspeak "${TS_DIRECTORY}/ts3server" "$@"
