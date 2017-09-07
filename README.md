@@ -2,15 +2,9 @@ svengo/docker-teamspeak
 ==================
 
 docker image for TeamSpeak 3 Server
-based off of alpine:3.6 and [mbentley/docker-teamspeak
-](https://github.com/mbentley/docker-teamspeak)
+based off of alpine:3.6 and [mbentley/docker-teamspeak](https://github.com/mbentley/docker-teamspeak).
 
 Note: This Dockerfile will always install the very latest version of TS3 available.
-
-----------
-The image isn't pushed to docker hub **yet**.
-----------
-
 
 Example usage (no persistent storage; for testing only - you will lose your data when the container is removed):
 
