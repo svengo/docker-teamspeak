@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#
+# http://windsock.io/automated-docker-image-builds-with-multiple-tags/
+# https://github.com/docker/hub-feedback/issues/341#issuecomment-248722131
+# 
+
+set -e
+
+# Parse image name for repo name
+tagStart=$(expr index "$IMAGE_NAME" :)  
+repoName=${IMAGE_NAME:0:tagStart-1}
+
+# Tag and push image for each additional tag
+for tag in {3.0.13.8,latest}; do
+  docker tag $IMAGE_NAME ${DOCKER_REPO}:${tag}
+  docker push ${DOCKER_REPO}:${tag}
+done
