@@ -1,9 +1,20 @@
 FROM alpine:3.6
-LABEL maintainer="Sven Gottwald <svengo@gmx.net>"
 
 ARG TS3_VERSION=3.0.13.8
 ARG TS3_ARCH=amd64
 ARG GLIBC_VERSION=2.25-r0
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG VCS_REF
+LABEL org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.name="docker-teamspeak" \
+  org.label-schema.description="TeamSpeak 3 Server Docker Image" \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.vcs-url="https://github.com/svengo/docker-teamspeak" \
+  org.label-schema.vendor="Sven Gottwald" \
+  org.label-schema.version=$TS3_VERSION \
+  org.label-schema.schema-version="1.0"
 
 ADD https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub /etc/apk/keys/sgerrand.rsa.pub
 ADD https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk /tmp/
