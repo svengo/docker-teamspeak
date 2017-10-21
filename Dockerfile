@@ -42,4 +42,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 EXPOSE 9987/udp 10011 30033
 CMD ["ts3server"]
 
-HEALTHCHECK --interval=5m --timeout=3s CMD echo quit | curl telnet://localhost:10011 || exit 1
+HEALTHCHECK --interval=5m --timeout=3s CMD echo quit | curl -sS telnet://localhost:10011 || exit 1
