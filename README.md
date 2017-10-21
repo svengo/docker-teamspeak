@@ -1,6 +1,11 @@
 svengo/docker-teamspeak
 ==================
 
+[![](https://images.microbadger.com/badges/image/svengo/teamspeak.svg)](https://microbadger.com/images/svengo/teamspeak "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/svengo/teamspeak.svg)](https://microbadger.com/images/svengo/teamspeak "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/svengo/teamspeak.svg)](https://microbadger.com/images/svengo/teamspeak "Get your own commit badge on microbadger.com")
+[![Anchore Image Policy](https://anchore.io/service/badges/policy/dbfa4576ad2c006fc8413ac70c397b1b6588e4ee691d492685f0d6b23cdc9b2d?registry=dockerhub&repository=svengo/teamspeak&tag=3.0.13.8)](https://anchore.io)
+
 docker image for TeamSpeak 3 Server
 based off of alpine:3.6 and [mbentley/docker-teamspeak](https://github.com/mbentley/docker-teamspeak).
 
