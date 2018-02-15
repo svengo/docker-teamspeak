@@ -1,8 +1,8 @@
 FROM alpine:3.6
 
-ARG TS3_VERSION=3.0.13.8
+ARG TS3_VERSION=3.1.0
 ARG TS3_ARCH=amd64
-ARG GLIBC_VERSION=2.25-r0
+ARG GLIBC_VERSION=2.27-r0
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

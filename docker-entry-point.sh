@@ -30,6 +30,11 @@ if [ "$1" == 'ts3server' ]; then
   done
   
   export LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH"
+  
+  # accept new LICENSE (needed for teamspeak 3.1.0)
+  touch .ts3server_license_accepted
+
+  # run server
   exec su-exec teamspeak "./$@"
 fi
 
